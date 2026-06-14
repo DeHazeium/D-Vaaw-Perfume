@@ -364,27 +364,6 @@
             color: #fff;
         }
 
-        .newsletter input {
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid #333;
-            padding: 10px 0;
-            color: #fff;
-            width: 70%;
-            margin-right: 10px;
-            outline: none;
-        }
-        
-        .newsletter button {
-            background: transparent;
-            border: none;
-            color: #d4af37;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
         .footer-bottom {
             text-align: center;
             border-top: 1px solid #222;
@@ -395,19 +374,10 @@
             justify-content: space-between;
             align-items: center;
         }
-        
-        .footer-socials a {
-            margin-left: 15px;
-            color: #aaa;
-        }
-        .footer-socials a:hover {
-            color: #fff;
-        }
     </style>
 </head>
 <body>
 
-    <!-- NAVIGATION -->
     <nav>
         <div class="nav-links">
             <a href="category-her.html">For Her</a>
@@ -424,7 +394,6 @@
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
     <header class="hero">
         <div class="hero-content">
             <h1>Perfect Harmony.</h1>
@@ -438,7 +407,6 @@
         </div>
     </header>
 
-    <!-- FEATURE BANNER -->
     <section class="feature-banner">
         <div class="feature-content">
             <div class="feature-tag">Beyond Boundaries</div>
@@ -446,7 +414,6 @@
         </div>
     </section>
 
-    <!-- COLLECTION GRID -->
     <section class="category-collection" id="collection">
         <div class="section-header">
             <h2>Unisex Collection</h2>
@@ -454,13 +421,14 @@
         </div>
         
         <div class="products-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 800px; margin: 0 auto;">
+            
             <div class="product-card">
                 <img src="https://via.placeholder.com/300x400/fff/222?text=Obsession" alt="Obsession">
                 <div class="product-category">Unisex</div>
                 <div class="product-title">Obsession</div>
                 <div class="product-notes">Top: Amber, Saffron, Woody<br>Base: Musky, Fruity, White Floral</div>
                 <div class="product-price">10ml: RM18.00 | 35ml: RM79.00</div>
-                <button class="btn btn-dark" onclick="triggerAddToCart()">Add to Cart</button>
+                <button class="btn btn-dark" onclick="triggerAddToCart(this)">Add to Cart</button>
             </div>
 
             <div class="product-card">
@@ -469,17 +437,16 @@
                 <div class="product-title">Valora</div>
                 <div class="product-notes">Top: Vanilla, White Floral, Salty<br>Base: Black Pepper, Marine</div>
                 <div class="product-price">10ml: RM18.00 | 35ml: RM79.00</div>
-                <button class="btn btn-dark" onclick="triggerAddToCart()">Add to Cart</button>
+                <button class="btn btn-dark" onclick="triggerAddToCart(this)">Add to Cart</button>
             </div>
+
         </div>
     </section>
 
-    <!-- VIEW ALL COLLECTION BUTTON -->
     <section class="view-all-bottom">
         <a href="shop-all.html" class="btn btn-dark">View All Collection</a>
     </section>
 
-    <!-- FOOTER -->
     <footer>
         <div class="footer-columns">
             <div class="footer-col">
@@ -501,38 +468,50 @@
                     <li><a href="privacy.html">Privacy Policy</a></li>
                 </ul>
             </div>
-            <div class="footer-col newsletter">
-                <h4>Join Our Community</h4>
-                <p style="font-size: 0.8rem; color: #aaa; margin-bottom: 20px; line-height: 1.5;">Subscribe to receive updates on new arrivals and special offers.</p>
-                <form action="subscribe.html" method="POST">
-                    <input type="email" placeholder="Email Address" required>
-                    <button type="submit">Subscribe</button>
-                </form>
-            </div>
         </div>
         <div class="footer-bottom">
             <p>&copy; 2026 D'Vaaw Perfume. All rights reserved.</p>
-            <div class="footer-socials">
-                <a href="https://instagram.com" target="_blank">Instagram</a>
-                <a href="https://facebook.com" target="_blank">Facebook</a>
-                <a href="https://tiktok.com" target="_blank">TikTok</a>
-            </div>
         </div>
     </footer>
 
-    <!-- CUSTOM TOAST UI SCRIPT -->
     <div id="custom-toast" class="toast-notification">
         <span class="toast-icon">✓</span>
         <span>Item Added To Cart</span>
     </div>
 
     <script>
-        function triggerAddToCart() {
+        function triggerAddToCart(buttonElement) {
+            const card = buttonElement.closest('.product-card');
+            const title = card.querySelector('.product-title').innerText;
+            const category = card.querySelector('.product-category').innerText;
+            const imageSrc = card.querySelector('img').src;
+
+            const newItem = {
+                id: title,
+                title: title,
+                category: category,
+                price: 79.00,
+                variant: '35ml',
+                image: imageSrc,
+                qty: 1
+            };
+
+            let cart = JSON.parse(localStorage.getItem('dvaaw_cart')) || [];
+            
+            let existingItem = cart.find(item => item.id === newItem.id);
+            if (existingItem) {
+                existingItem.qty += 1;
+            } else {
+                cart.push(newItem);
+            }
+
+            localStorage.setItem('dvaaw_cart', JSON.stringify(cart));
+
             const toast = document.getElementById('custom-toast');
             toast.classList.add('show');
             setTimeout(() => {
                 window.location.href = 'cart.html';
-            }, 1500); 
+            }, 1000); 
         }
     </script>
 </body>
