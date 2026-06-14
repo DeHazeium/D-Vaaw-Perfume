@@ -364,27 +364,6 @@
             color: #fff;
         }
 
-        .newsletter input {
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid #333;
-            padding: 10px 0;
-            color: #fff;
-            width: 70%;
-            margin-right: 10px;
-            outline: none;
-        }
-        
-        .newsletter button {
-            background: transparent;
-            border: none;
-            color: #d4af37;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
         .footer-bottom {
             text-align: center;
             border-top: 1px solid #222;
@@ -395,19 +374,10 @@
             justify-content: space-between;
             align-items: center;
         }
-        
-        .footer-socials a {
-            margin-left: 15px;
-            color: #aaa;
-        }
-        .footer-socials a:hover {
-            color: #fff;
-        }
     </style>
 </head>
 <body>
 
-    <!-- NAVIGATION -->
     <nav>
         <div class="nav-links">
             <a href="category-her.html">For Her</a>
@@ -424,7 +394,6 @@
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
     <header class="hero">
         <div class="hero-content">
             <h1>Command The Room.</h1>
@@ -438,7 +407,6 @@
         </div>
     </header>
 
-    <!-- FEATURE BANNER -->
     <section class="feature-banner">
         <div class="feature-content">
             <div class="feature-tag">Unmistakable Confidence</div>
@@ -446,7 +414,6 @@
         </div>
     </section>
 
-    <!-- COLLECTION GRID -->
     <section class="category-collection" id="collection">
         <div class="section-header">
             <h2>For Him Collection</h2>
@@ -454,13 +421,14 @@
         </div>
         
         <div class="products-grid">
+            
             <div class="product-card">
                 <img src="https://via.placeholder.com/300x400/fff/222?text=Hottest+Guy" alt="Hottest Guy">
                 <div class="product-category">For Him</div>
                 <div class="product-title">Hottest Guy</div>
                 <div class="product-notes">Top: Fresh Spicy, Amber, Citrus<br>Base: Herbal, Warm Spicy, Lavender</div>
                 <div class="product-price">10ml: RM18.00 | 35ml: RM79.00</div>
-                <button class="btn btn-dark" onclick="triggerAddToCart()">Add to Cart</button>
+                <button class="btn btn-dark" onclick="triggerAddToCart(this)">Add to Cart</button>
             </div>
 
             <div class="product-card">
@@ -469,7 +437,7 @@
                 <div class="product-title">The Zillion</div>
                 <div class="product-notes">Top: Cinnamon, Warm Spicy, Citrus<br>Base: Rose, Green, Leather</div>
                 <div class="product-price">10ml: RM18.00 | 35ml: RM79.00</div>
-                <button class="btn btn-dark" onclick="triggerAddToCart()">Add to Cart</button>
+                <button class="btn btn-dark" onclick="triggerAddToCart(this)">Add to Cart</button>
             </div>
 
             <div class="product-card">
@@ -478,7 +446,7 @@
                 <div class="product-title">Great Man</div>
                 <div class="product-notes">Top: Bergamot, Fruity, Sweet<br>Base: Musky, Citrus, Mossy</div>
                 <div class="product-price">10ml: RM18.00 | 35ml: RM79.00</div>
-                <button class="btn btn-dark" onclick="triggerAddToCart()">Add to Cart</button>
+                <button class="btn btn-dark" onclick="triggerAddToCart(this)">Add to Cart</button>
             </div>
 
             <div class="product-card">
@@ -487,7 +455,7 @@
                 <div class="product-title">VIP Scent</div>
                 <div class="product-notes">Top: Aromatic, Vodka<br>Base: Citrus, Sweet, Fruity</div>
                 <div class="product-price">10ml: RM18.00 | 35ml: RM79.00</div>
-                <button class="btn btn-dark" onclick="triggerAddToCart()">Add to Cart</button>
+                <button class="btn btn-dark" onclick="triggerAddToCart(this)">Add to Cart</button>
             </div>
 
             <div class="product-card">
@@ -496,7 +464,7 @@
                 <div class="product-title">Perfect Men</div>
                 <div class="product-notes">Top: Citrus, Marine, Aromatic<br>Base: Sweet, Floral</div>
                 <div class="product-price">10ml: RM18.00 | 35ml: RM79.00</div>
-                <button class="btn btn-dark" onclick="triggerAddToCart()">Add to Cart</button>
+                <button class="btn btn-dark" onclick="triggerAddToCart(this)">Add to Cart</button>
             </div>
 
             <div class="product-card">
@@ -505,7 +473,7 @@
                 <div class="product-title">The Gentleman</div>
                 <div class="product-notes">Top: Aquatic, Citrus<br>Base: Lavender, Fresh, Spicy</div>
                 <div class="product-price">10ml: RM18.00 | 35ml: RM79.00</div>
-                <button class="btn btn-dark" onclick="triggerAddToCart()">Add to Cart</button>
+                <button class="btn btn-dark" onclick="triggerAddToCart(this)">Add to Cart</button>
             </div>
 
             <div class="product-card">
@@ -514,26 +482,25 @@
                 <div class="product-title">The Eros Men</div>
                 <div class="product-notes">Top: Aromatic, Citrus, Green<br>Base: Powdery, Sweet, Fruity</div>
                 <div class="product-price">10ml: RM18.00 | 35ml: RM79.00</div>
-                <button class="btn btn-dark" onclick="triggerAddToCart()">Add to Cart</button>
+                <button class="btn btn-dark" onclick="triggerAddToCart(this)">Add to Cart</button>
             </div>
 
             <div class="product-card">
                 <img src="https://via.placeholder.com/300x400/fff/222?text=Titan-X" alt="Titan-X">
                 <div class="product-category">For Him</div>
                 <div class="product-title">Titan-X</div>
-                <div class="product-notes">Top: Zingiber Officinale<br>Base: Bourbon Vanilla</div>
+                <div class="product-notes">Top: Zingiber Officinale Var. Rubrum<br>Base: Bourbon Vanilla</div>
                 <div class="product-price">10ml: RM18.00 | 35ml: RM79.00</div>
-                <button class="btn btn-dark" onclick="triggerAddToCart()">Add to Cart</button>
+                <button class="btn btn-dark" onclick="triggerAddToCart(this)">Add to Cart</button>
             </div>
+
         </div>
     </section>
 
-    <!-- VIEW ALL COLLECTION BUTTON -->
     <section class="view-all-bottom">
         <a href="shop-all.html" class="btn btn-dark">View All Collection</a>
     </section>
 
-    <!-- FOOTER -->
     <footer>
         <div class="footer-columns">
             <div class="footer-col">
@@ -555,38 +522,50 @@
                     <li><a href="privacy.html">Privacy Policy</a></li>
                 </ul>
             </div>
-            <div class="footer-col newsletter">
-                <h4>Join Our Community</h4>
-                <p style="font-size: 0.8rem; color: #aaa; margin-bottom: 20px; line-height: 1.5;">Subscribe to receive updates on new arrivals and special offers.</p>
-                <form action="subscribe.html" method="POST">
-                    <input type="email" placeholder="Email Address" required>
-                    <button type="submit">Subscribe</button>
-                </form>
-            </div>
         </div>
         <div class="footer-bottom">
             <p>&copy; 2026 D'Vaaw Perfume. All rights reserved.</p>
-            <div class="footer-socials">
-                <a href="https://instagram.com" target="_blank">Instagram</a>
-                <a href="https://facebook.com" target="_blank">Facebook</a>
-                <a href="https://tiktok.com" target="_blank">TikTok</a>
-            </div>
         </div>
     </footer>
 
-    <!-- CUSTOM TOAST UI SCRIPT -->
     <div id="custom-toast" class="toast-notification">
         <span class="toast-icon">✓</span>
         <span>Item Added To Cart</span>
     </div>
 
     <script>
-        function triggerAddToCart() {
+        function triggerAddToCart(buttonElement) {
+            const card = buttonElement.closest('.product-card');
+            const title = card.querySelector('.product-title').innerText;
+            const category = card.querySelector('.product-category').innerText;
+            const imageSrc = card.querySelector('img').src;
+
+            const newItem = {
+                id: title,
+                title: title,
+                category: category,
+                price: 79.00,
+                variant: '35ml',
+                image: imageSrc,
+                qty: 1
+            };
+
+            let cart = JSON.parse(localStorage.getItem('dvaaw_cart')) || [];
+            
+            let existingItem = cart.find(item => item.id === newItem.id);
+            if (existingItem) {
+                existingItem.qty += 1;
+            } else {
+                cart.push(newItem);
+            }
+
+            localStorage.setItem('dvaaw_cart', JSON.stringify(cart));
+
             const toast = document.getElementById('custom-toast');
             toast.classList.add('show');
             setTimeout(() => {
                 window.location.href = 'cart.html';
-            }, 1500); 
+            }, 1000); 
         }
     </script>
 </body>
