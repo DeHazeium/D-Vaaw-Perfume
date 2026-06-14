@@ -66,7 +66,7 @@
             color: #fff; 
         }
 
-        /* Page Header with Steps */
+        /* Page Header */
         .page-header {
             background-color: #f9f9f9;
             padding: 50px 5%;
@@ -105,10 +105,9 @@
             display: flex;
             padding: 60px 10%;
             gap: 50px;
-            flex: 1; /* Pushes footer down */
+            flex: 1;
         }
 
-        /* Cart Items Section */
         .cart-items-wrapper {
             flex: 2;
         }
@@ -174,7 +173,6 @@
             letter-spacing: 1px;
         }
 
-        /* Quantity Selector */
         .qty-selector {
             display: flex;
             align-items: center;
@@ -203,7 +201,7 @@
             border: none;
             font-family: 'Montserrat', sans-serif;
             font-size: 1rem;
-            pointer-events: none; /* User must use buttons to change */
+            pointer-events: none; 
         }
 
         .item-price {
@@ -281,7 +279,7 @@
             align-items: center;
             gap: 10px;
             width: 100%;
-            background-color: #25D366; /* WhatsApp Green */
+            background-color: #25D366; 
             color: #fff;
             text-align: center;
             padding: 18px 0;
@@ -371,7 +369,6 @@
 </head>
 <body>
 
-    <!-- NAVIGATION -->
     <nav>
         <div class="nav-links">
             <a href="category-her.html">For Her</a>
@@ -388,7 +385,6 @@
         </div>
     </nav>
 
-    <!-- PAGE HEADER -->
     <header class="page-header">
         <h1>Your Cart</h1>
         <div class="checkout-steps">
@@ -397,10 +393,8 @@
         </div>
     </header>
 
-    <!-- CART SYSTEM -->
     <section class="cart-container">
         
-        <!-- Items List -->
         <div class="cart-items-wrapper">
             <div class="cart-header">
                 <div>Product</div>
@@ -409,13 +403,11 @@
                 <div></div>
             </div>
 
-            <!-- JAVASCRIPT WILL INJECT ITEMS HERE -->
             <div id="cart-content"></div>
 
             <a href="shop-all.html" class="continue-shopping">&larr; Continue Shopping</a>
         </div>
 
-        <!-- Order Summary Sidebar -->
         <div class="cart-summary">
             <h2>Order Summary</h2>
             
@@ -434,7 +426,7 @@
                 <span>RM<span id="summary-total">0.00</span></span>
             </div>
 
-            <button class="checkout-btn" onclick="checkout()">
+            <button class="checkout-btn" onclick="window.checkout()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                 Proceed to WhatsApp
             </button>
@@ -442,7 +434,6 @@
 
     </section>
 
-    <!-- FOOTER -->
     <footer>
         <div class="footer-columns">
             <div class="footer-col">
@@ -470,18 +461,31 @@
         </div>
     </footer>
 
-    <!-- LOGIC TO RENDER THE CART AND SEND DIRECT TO WHATSAPP -->
-    <script>
-        // Your specific WhatsApp Number
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCxOigVTO2ZCeKYoVRJvU085fEiEL9EKOI",
+            authDomain: "d-vaaw-perfume.firebaseapp.com",
+            databaseURL: "https://d-vaaw-perfume-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "d-vaaw-perfume",
+            storageBucket: "d-vaaw-perfume.firebasestorage.app",
+            messagingSenderId: "176200300799",
+            appId: "1:176200300799:web:ee8893e3e3e6a4dd14b4ca"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
         const WHATSAPP_NUMBER = "601118866239"; 
 
-        function loadCart() {
+        window.loadCart = function() {
             const cartContent = document.getElementById('cart-content');
             let cart = JSON.parse(localStorage.getItem('dvaaw_cart')) || [];
             
             if (cart.length === 0) {
                 cartContent.innerHTML = '<div class="empty-cart-msg">Your cart is currently empty.</div>';
-                updateTotals(cart);
+                window.updateTotals(cart);
                 return;
             }
 
@@ -498,44 +502,43 @@
                         </div>
                     </div>
                     <div class="qty-selector">
-                        <button class="qty-btn minus" onclick="updateQty(${index}, -1)">-</button>
+                        <button class="qty-btn minus" onclick="window.updateQty(${index}, -1)">-</button>
                         <input type="text" class="qty-input" value="${item.qty}" readonly>
-                        <button class="qty-btn plus" onclick="updateQty(${index}, 1)">+</button>
+                        <button class="qty-btn plus" onclick="window.updateQty(${index}, 1)">+</button>
                     </div>
                     <div class="item-price">RM<span class="row-total">${(item.price * item.qty).toFixed(2)}</span></div>
-                    <button class="item-remove" onclick="removeItem(${index})" title="Remove Item">&times;</button>
+                    <button class="item-remove" onclick="window.removeItem(${index})" title="Remove Item">&times;</button>
                 </div>
                 `;
             });
-            updateTotals(cart);
-        }
+            window.updateTotals(cart);
+        };
 
-        function updateQty(index, change) {
+        window.updateQty = function(index, change) {
             let cart = JSON.parse(localStorage.getItem('dvaaw_cart'));
             cart[index].qty += change;
             if (cart[index].qty < 1) cart[index].qty = 1; 
             localStorage.setItem('dvaaw_cart', JSON.stringify(cart));
-            loadCart();
-        }
+            window.loadCart();
+        };
 
-        function removeItem(index) {
+        window.removeItem = function(index) {
             let cart = JSON.parse(localStorage.getItem('dvaaw_cart'));
             cart.splice(index, 1); 
             localStorage.setItem('dvaaw_cart', JSON.stringify(cart));
-            loadCart();
-        }
+            window.loadCart();
+        };
 
-        function updateTotals(cart) {
+        window.updateTotals = function(cart) {
             let subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             const shipping = subtotal > 0 ? 10.00 : 0.00; 
             
             document.getElementById('summary-subtotal').textContent = subtotal.toFixed(2);
             document.getElementById('summary-shipping').textContent = shipping.toFixed(2);
             document.getElementById('summary-total').textContent = (subtotal + shipping).toFixed(2);
-        }
+        };
 
-        // DIRECT TO WHATSAPP CHECKOUT
-        function checkout() {
+        window.checkout = async function() {
             let cart = JSON.parse(localStorage.getItem('dvaaw_cart')) || [];
             
             if(cart.length === 0) {
@@ -543,37 +546,61 @@
                 return;
             } 
 
-            // Get totals directly from the UI
+            const btn = document.querySelector('.checkout-btn');
+            const originalBtnHTML = btn.innerHTML;
+            btn.innerHTML = 'Processing Order...';
+            btn.style.pointerEvents = 'none';
+
             let subtotal = document.getElementById('summary-subtotal').textContent;
             let shipping = document.getElementById('summary-shipping').textContent;
             let total = document.getElementById('summary-total').textContent;
 
-            // Build the WhatsApp Message
-            let message = `*NEW ORDER - D'VAAW PERFUME* 🌟\n\n`;
-            
-            message += `*ORDER ITEMS*\n`;
-            cart.forEach(item => {
-                const itemTotal = (item.price * item.qty).toFixed(2);
-                message += `▪️ ${item.qty}x ${item.title} (${item.variant}) - RM${itemTotal}\n`;
-            });
+            try {
+                // 1. SAVE TO FIREBASE
+                await addDoc(collection(db, "orders"), {
+                    orderItems: cart,
+                    subtotal: parseFloat(subtotal),
+                    shippingFee: parseFloat(shipping),
+                    totalAmount: parseFloat(total),
+                    status: "Pending WhatsApp Confirmation",
+                    timestamp: serverTimestamp()
+                });
 
-            message += `\n*PAYMENT SUMMARY*\n`;
-            message += `Subtotal: RM${subtotal}\n`;
-            message += `Shipping: RM${shipping}\n`;
-            message += `*Total to Pay: RM${total}*\n\n`;
-            
-            message += `Hi! I would like to place this order. Please let me know how to proceed with payment and provide my shipping details.`;
+                // 2. CLEAR LOCAL CART
+                localStorage.removeItem('dvaaw_cart');
 
-            // Format for URL
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
-            
-            // Open WhatsApp
-            window.open(whatsappUrl, '_blank');
-        }
+                // 3. SEND TO WHATSAPP
+                let message = `*NEW ORDER - D'VAAW PERFUME* 🌟\n\n`;
+                message += `*ORDER ITEMS*\n`;
+                cart.forEach(item => {
+                    const itemTotal = (item.price * item.qty).toFixed(2);
+                    message += `▪️ ${item.qty}x ${item.title} (${item.variant}) - RM${itemTotal}\n`;
+                });
 
-        // Run when page loads
-        document.addEventListener('DOMContentLoaded', loadCart);
+                message += `\n*PAYMENT SUMMARY*\n`;
+                message += `Subtotal: RM${subtotal}\n`;
+                message += `Shipping: RM${shipping}\n`;
+                message += `*Total to Pay: RM${total}*\n\n`;
+                message += `Hi! I would like to place this order. Please let me know how to proceed with payment and provide my shipping details.`;
+
+                const encodedMessage = encodeURIComponent(message);
+                const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+                
+                btn.innerHTML = originalBtnHTML;
+                btn.style.pointerEvents = 'auto';
+                
+                window.open(whatsappUrl, '_blank');
+                window.loadCart();
+
+            } catch (error) {
+                console.error("Error saving order: ", error);
+                alert("Something went wrong. Please try again.");
+                btn.innerHTML = originalBtnHTML;
+                btn.style.pointerEvents = 'auto';
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', window.loadCart);
     </script>
 </body>
 </html>
