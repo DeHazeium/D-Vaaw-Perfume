@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart | D'Vaaw Fragrances</title>
     <style>
-        /* Base Styles & Typography */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap');
 
         * {
@@ -33,7 +32,6 @@
             display: block;
         }
 
-        /* Navigation */
         nav {
             background-color: #000;
             color: #fff;
@@ -52,9 +50,9 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        
+
         .nav-links a:hover, .nav-icons a:hover {
-            color: #d4af37; 
+            color: #d4af37;
         }
 
         .logo {
@@ -63,10 +61,9 @@
             letter-spacing: 4px;
             text-align: center;
             text-transform: uppercase;
-            color: #fff; 
+            color: #fff;
         }
 
-        /* Page Header */
         .page-header {
             background-color: #f9f9f9;
             padding: 50px 5%;
@@ -100,7 +97,6 @@
             padding-bottom: 5px;
         }
 
-        /* Cart Layout */
         .cart-container {
             display: flex;
             padding: 60px 10%;
@@ -163,7 +159,7 @@
             color: #666;
             margin-bottom: 10px;
         }
-        
+
         .item-variant {
             display: inline-block;
             background-color: #eee;
@@ -173,7 +169,6 @@
             letter-spacing: 1px;
         }
 
-        /* Quantity Selector */
         .qty-selector {
             display: flex;
             align-items: center;
@@ -202,7 +197,7 @@
             border: none;
             font-family: 'Montserrat', sans-serif;
             font-size: 1rem;
-            pointer-events: none; 
+            pointer-events: none;
         }
 
         .item-price {
@@ -234,7 +229,6 @@
             padding-bottom: 2px;
         }
 
-        /* Order Summary Section */
         .cart-summary {
             flex: 1;
             background-color: #fcfcfc;
@@ -280,7 +274,7 @@
             align-items: center;
             gap: 10px;
             width: 100%;
-            background-color: #25D366; 
+            background-color: #25D366;
             color: #fff;
             text-align: center;
             padding: 18px 0;
@@ -297,7 +291,7 @@
         .checkout-btn:hover {
             background-color: #128C7E;
         }
-        
+
         .checkout-btn svg {
             width: 20px;
             height: 20px;
@@ -315,12 +309,11 @@
             text-align: center;
         }
 
-        /* Footer */
         footer {
             background-color: #000;
             color: #fff;
             padding: 60px 10% 20px;
-            margin-top: auto; 
+            margin-top: auto;
         }
 
         .footer-columns {
@@ -345,13 +338,13 @@
         .footer-col ul li {
             margin-bottom: 12px;
         }
-        
+
         .footer-col ul li a {
             font-size: 0.8rem;
             color: #aaa;
             transition: color 0.3s ease;
         }
-        
+
         .footer-col ul li a:hover {
             color: #fff;
         }
@@ -398,7 +391,7 @@
 
     <!-- CART SYSTEM -->
     <section class="cart-container">
-        
+
         <div class="cart-items-wrapper">
             <div class="cart-header">
                 <div>Product</div>
@@ -414,12 +407,12 @@
 
         <div class="cart-summary">
             <h2>Order Summary</h2>
-            
+
             <div class="summary-row">
                 <span>Subtotal</span>
                 <span>RM<span id="summary-subtotal">0.00</span></span>
             </div>
-            
+
             <div class="summary-row">
                 <span>Shipping</span>
                 <span>RM<span id="summary-shipping">0.00</span></span>
@@ -467,7 +460,7 @@
         </div>
     </footer>
 
-    <!-- BULLETPROOF CART & FIREBASE SCRIPT -->
+    <!-- CART & FIREBASE SCRIPT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
@@ -484,14 +477,13 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        
-        // Your exact WhatsApp Number
-        const WHATSAPP_NUMBER = "601118866239"; 
+
+        const WHATSAPP_NUMBER = "601118866239";
 
         window.loadCart = function() {
             const cartContent = document.getElementById('cart-content');
             let cart = JSON.parse(localStorage.getItem('dvaaw_cart')) || [];
-            
+
             if (cart.length === 0) {
                 cartContent.innerHTML = '<div class="empty-cart-msg">Your cart is currently empty.</div>';
                 window.updateTotals(cart);
@@ -526,22 +518,22 @@
         window.updateQty = function(index, change) {
             let cart = JSON.parse(localStorage.getItem('dvaaw_cart'));
             cart[index].qty += change;
-            if (cart[index].qty < 1) cart[index].qty = 1; 
+            if (cart[index].qty < 1) cart[index].qty = 1;
             localStorage.setItem('dvaaw_cart', JSON.stringify(cart));
             window.loadCart();
         };
 
         window.removeItem = function(index) {
             let cart = JSON.parse(localStorage.getItem('dvaaw_cart'));
-            cart.splice(index, 1); 
+            cart.splice(index, 1);
             localStorage.setItem('dvaaw_cart', JSON.stringify(cart));
             window.loadCart();
         };
 
         window.updateTotals = function(cart) {
             let subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            const shipping = subtotal > 0 ? 10.00 : 0.00; 
-            
+            const shipping = subtotal > 0 ? 10.00 : 0.00;
+
             document.getElementById('summary-subtotal').textContent = subtotal.toFixed(2);
             document.getElementById('summary-shipping').textContent = shipping.toFixed(2);
             document.getElementById('summary-total').textContent = (subtotal + shipping).toFixed(2);
@@ -549,14 +541,13 @@
 
         window.checkout = function() {
             let cart = JSON.parse(localStorage.getItem('dvaaw_cart')) || [];
-            
-            if(cart.length === 0) {
+
+            if (cart.length === 0) {
                 alert("Your cart is empty!");
                 return;
-            } 
+            }
 
             const btn = document.querySelector('.checkout-btn');
-            const originalBtnHTML = btn.innerHTML;
             btn.innerHTML = 'Opening WhatsApp...';
             btn.style.pointerEvents = 'none';
 
@@ -564,14 +555,13 @@
             let shipping = document.getElementById('summary-shipping').textContent;
             let total = document.getElementById('summary-total').textContent;
 
-            // 1. INSTANTLY BUILD WHATSAPP MESSAGE
+            // 1. BUILD WHATSAPP MESSAGE
             let message = `*NEW ORDER - D'VAAW PERFUME* 🌟\n\n`;
             message += `*ORDER ITEMS*\n`;
             cart.forEach(item => {
                 const itemTotal = (item.price * item.qty).toFixed(2);
                 message += `▪️ ${item.qty}x ${item.title} (${item.variant}) - RM${itemTotal}\n`;
             });
-
             message += `\n*PAYMENT SUMMARY*\n`;
             message += `Subtotal: RM${subtotal}\n`;
             message += `Shipping: RM${shipping}\n`;
@@ -581,7 +571,7 @@
             const encodedMessage = encodeURIComponent(message);
             const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
 
-            // 2. FIREBASE SAVE IN BACKGROUND
+            // 2. SAVE TO FIREBASE IN BACKGROUND (no await — non-blocking)
             addDoc(collection(db, "orders"), {
                 orderItems: cart,
                 subtotal: parseFloat(subtotal),
@@ -589,20 +579,20 @@
                 totalAmount: parseFloat(total),
                 status: "Pending WhatsApp Confirmation",
                 timestamp: serverTimestamp()
-            }).then(() => {
-                console.log("Order saved to Firebase successfully.");
             }).catch((error) => {
-                console.error("Firebase save failed, but WhatsApp is still opening.", error);
+                console.error("Firebase save failed.", error);
             });
 
-            // 3. CLEAR CART & RESTORE UI (In case they hit the back button later)
+            // 3. CLEAR CART
             localStorage.removeItem('dvaaw_cart');
-            btn.innerHTML = originalBtnHTML;
-            btn.style.pointerEvents = 'auto';
-            window.loadCart();
 
-            // 4. REDIRECT IN SAME TAB (Bypasses mobile pop-up blockers)
+            // 4. REDIRECT IMMEDIATELY — nothing runs before this now
             window.location.href = whatsappUrl;
+
+            // 5. Reload cart display after redirect (for back-button users)
+            setTimeout(() => {
+                window.loadCart();
+            }, 500);
         };
 
         document.addEventListener('DOMContentLoaded', window.loadCart);
