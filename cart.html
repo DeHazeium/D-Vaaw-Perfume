@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart | D'Vaaw Fragrances</title>
     <style>
+        /* Base Styles & Typography */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap');
 
         * {
@@ -433,7 +434,6 @@
                 Proceed to WhatsApp
             </button>
         </div>
-
     </section>
 
     <footer>
@@ -467,7 +467,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // Your specific D'Vaaw configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCxOigVTO2ZCeKYoVRJvU085fEiEL9EKOI",
             authDomain: "d-vaaw-perfume.firebaseapp.com",
@@ -481,7 +480,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         
-        // Formatted WhatsApp Number
         const WHATSAPP_NUMBER = "601118866239"; 
 
         window.loadCart = function() {
@@ -553,6 +551,8 @@
 
             const btn = document.querySelector('.checkout-btn');
             const originalBtnHTML = btn.innerHTML;
+            
+            // Set Loading State
             btn.innerHTML = 'Processing Order...';
             btn.style.pointerEvents = 'none';
 
@@ -560,8 +560,25 @@
             let shipping = document.getElementById('summary-shipping').textContent;
             let total = document.getElementById('summary-total').textContent;
 
+            // Prepare WhatsApp Message
+            let message = `*NEW ORDER - D'VAAW PERFUME* 🌟\n\n`;
+            message += `*ORDER ITEMS*\n`;
+            cart.forEach(item => {
+                const itemTotal = (item.price * item.qty).toFixed(2);
+                message += `▪️ ${item.qty}x ${item.title} (${item.variant}) - RM${itemTotal}\n`;
+            });
+
+            message += `\n*PAYMENT SUMMARY*\n`;
+            message += `Subtotal: RM${subtotal}\n`;
+            message += `Shipping: RM${shipping}\n`;
+            message += `*Total to Pay: RM${total}*\n\n`;
+            message += `Hi! I would like to place this order. Please let me know how to proceed with payment and provide my shipping details.`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+
             try {
-                // 1. SAVE TO FIREBASE
+                // 1. ATTEMPT TO SAVE TO FIREBASE
                 await addDoc(collection(db, "orders"), {
                     orderItems: cart,
                     subtotal: parseFloat(subtotal),
@@ -571,41 +588,25 @@
                     timestamp: serverTimestamp()
                 });
 
-                // 2. CLEAR LOCAL CART
+                // Clear Local Cart if save succeeds
                 localStorage.removeItem('dvaaw_cart');
-
-                // 3. SEND TO WHATSAPP
-                let message = `*NEW ORDER - D'VAAW PERFUME* 🌟\n\n`;
-                message += `*ORDER ITEMS*\n`;
-                cart.forEach(item => {
-                    const itemTotal = (item.price * item.qty).toFixed(2);
-                    message += `▪️ ${item.qty}x ${item.title} (${item.variant}) - RM${itemTotal}\n`;
-                });
-
-                message += `\n*PAYMENT SUMMARY*\n`;
-                message += `Subtotal: RM${subtotal}\n`;
-                message += `Shipping: RM${shipping}\n`;
-                message += `*Total to Pay: RM${total}*\n\n`;
-                message += `Hi! I would like to place this order. Please let me know how to proceed with payment and provide my shipping details.`;
-
-                const encodedMessage = encodeURIComponent(message);
-                const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
                 
+            } catch (error) {
+                // If Firebase fails (e.g. permission error), log it but DO NOT stop the checkout
+                console.error("Firebase save failed. Proceeding to WhatsApp anyway.", error);
+                alert("Note: Order could not be saved to the database, but you can still check out via WhatsApp.");
+            } finally {
+                // 2. OPEN WHATSAPP (Always executes)
                 btn.innerHTML = originalBtnHTML;
                 btn.style.pointerEvents = 'auto';
                 
                 window.open(whatsappUrl, '_blank');
+                
+                // Refresh cart UI
                 window.loadCart();
-
-            } catch (error) {
-                console.error("Error saving order: ", error);
-                alert("Something went wrong processing your order. Please try again.");
-                btn.innerHTML = originalBtnHTML;
-                btn.style.pointerEvents = 'auto';
             }
         };
 
-        // Run when page loads
         document.addEventListener('DOMContentLoaded', window.loadCart);
     </script>
 </body>
