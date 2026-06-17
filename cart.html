@@ -370,6 +370,7 @@
 </head>
 <body>
 
+    <!-- NAVIGATION -->
     <nav>
         <div class="nav-links">
             <a href="category-her.html">For Her</a>
@@ -386,6 +387,7 @@
         </div>
     </nav>
 
+    <!-- PAGE HEADER -->
     <header class="page-header">
         <h1>Your Cart</h1>
         <div class="checkout-steps">
@@ -394,6 +396,7 @@
         </div>
     </header>
 
+    <!-- CART SYSTEM -->
     <section class="cart-container">
         
         <div class="cart-items-wrapper">
@@ -436,6 +439,7 @@
         </div>
     </section>
 
+    <!-- FOOTER -->
     <footer>
         <div class="footer-columns">
             <div class="footer-col">
@@ -463,6 +467,7 @@
         </div>
     </footer>
 
+    <!-- BULLETPROOF CART & FIREBASE SCRIPT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
@@ -480,6 +485,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         
+        // Your exact WhatsApp Number
         const WHATSAPP_NUMBER = "601118866239"; 
 
         window.loadCart = function() {
@@ -541,7 +547,7 @@
             document.getElementById('summary-total').textContent = (subtotal + shipping).toFixed(2);
         };
 
-        window.checkout = async function() {
+        window.checkout = function() {
             let cart = JSON.parse(localStorage.getItem('dvaaw_cart')) || [];
             
             if(cart.length === 0) {
@@ -551,16 +557,14 @@
 
             const btn = document.querySelector('.checkout-btn');
             const originalBtnHTML = btn.innerHTML;
-            
-            // Set Loading State
-            btn.innerHTML = 'Processing Order...';
+            btn.innerHTML = 'Opening WhatsApp...';
             btn.style.pointerEvents = 'none';
 
             let subtotal = document.getElementById('summary-subtotal').textContent;
             let shipping = document.getElementById('summary-shipping').textContent;
             let total = document.getElementById('summary-total').textContent;
 
-            // Prepare WhatsApp Message
+            // 1. INSTANTLY BUILD WHATSAPP MESSAGE
             let message = `*NEW ORDER - D'VAAW PERFUME* 🌟\n\n`;
             message += `*ORDER ITEMS*\n`;
             cart.forEach(item => {
@@ -577,34 +581,28 @@
             const encodedMessage = encodeURIComponent(message);
             const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
 
-            try {
-                // 1. ATTEMPT TO SAVE TO FIREBASE
-                await addDoc(collection(db, "orders"), {
-                    orderItems: cart,
-                    subtotal: parseFloat(subtotal),
-                    shippingFee: parseFloat(shipping),
-                    totalAmount: parseFloat(total),
-                    status: "Pending WhatsApp Confirmation",
-                    timestamp: serverTimestamp()
-                });
+            // 2. FIREBASE SAVE IN BACKGROUND
+            addDoc(collection(db, "orders"), {
+                orderItems: cart,
+                subtotal: parseFloat(subtotal),
+                shippingFee: parseFloat(shipping),
+                totalAmount: parseFloat(total),
+                status: "Pending WhatsApp Confirmation",
+                timestamp: serverTimestamp()
+            }).then(() => {
+                console.log("Order saved to Firebase successfully.");
+            }).catch((error) => {
+                console.error("Firebase save failed, but WhatsApp is still opening.", error);
+            });
 
-                // Clear Local Cart if save succeeds
-                localStorage.removeItem('dvaaw_cart');
-                
-            } catch (error) {
-                // If Firebase fails (e.g. permission error), log it but DO NOT stop the checkout
-                console.error("Firebase save failed. Proceeding to WhatsApp anyway.", error);
-                alert("Note: Order could not be saved to the database, but you can still check out via WhatsApp.");
-            } finally {
-                // 2. OPEN WHATSAPP (Always executes)
-                btn.innerHTML = originalBtnHTML;
-                btn.style.pointerEvents = 'auto';
-                
-                window.open(whatsappUrl, '_blank');
-                
-                // Refresh cart UI
-                window.loadCart();
-            }
+            // 3. CLEAR CART & RESTORE UI (In case they hit the back button later)
+            localStorage.removeItem('dvaaw_cart');
+            btn.innerHTML = originalBtnHTML;
+            btn.style.pointerEvents = 'auto';
+            window.loadCart();
+
+            // 4. REDIRECT IN SAME TAB (Bypasses mobile pop-up blockers)
+            window.location.href = whatsappUrl;
         };
 
         document.addEventListener('DOMContentLoaded', window.loadCart);
