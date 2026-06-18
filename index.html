@@ -5,21 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>D'Vaaw | Gula Apong Scents</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:wght@300;400;500;600&display=swap');
+        @font-face { font-family: 'Willsyard'; src: url('fonts/Willsyard.woff2') format('woff2'), url('fonts/Willsyard.ttf') format('truetype'); font-weight: normal; font-style: normal; font-display: swap; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
         body { background-color: #fff; color: #111; }
         a { text-decoration: none; color: inherit; }
         img { max-width: 100%; display: block; }
 
-        .btn { display: inline-block; padding: 12px 24px; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; font-weight: 500; border: 1px solid #fff; color: #fff; transition: all 0.3s ease; cursor: pointer; text-align: center; }
+        .btn { display: inline-block; padding: 12px 24px; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; font-weight: 500; font-style: normal; font-family: 'Montserrat', sans-serif; border: 1px solid #fff; color: #fff; transition: all 0.3s ease; cursor: pointer; text-align: center; }
         .btn:hover { background-color: #fff; color: #000; }
-        .btn-dark { border: 1px solid #111; color: #111; }
+        .btn-dark { border: 1px solid #111; color: #111; font-style: normal; font-family: 'Montserrat', sans-serif; }
         .btn-dark:hover { background-color: #111; color: #fff; }
 
         nav { background-color: rgba(0,0,0,0.9); color: #fff; display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; position: absolute; width: 100%; z-index: 10; }
         .nav-links, .nav-icons { display: flex; gap: 25px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
         .nav-links a:hover, .nav-icons a:hover { color: #d4af37; }
-        .logo { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600; font-style: italic; letter-spacing: 3px; text-align: center; color: #d4af37; text-transform: none; }
+        .logo { font-family: 'Willsyard', 'Playfair Display', serif; font-size: 2.2rem; font-weight: 400; font-style: normal; letter-spacing: 4px; text-align: center; color: #d4af37; text-transform: none; }
 
         .hero { background-color: #000; color: #fff; display: flex; align-items: center; min-height: 100vh; padding: 100px 5% 0 10%; position: relative; overflow: hidden; }
         .hero-content { flex: 1; max-width: 600px; z-index: 2; }
@@ -80,7 +81,7 @@
         .reveal-left.visible { opacity: 1; transform: translateX(0); }
         .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
         .reveal-right.visible { opacity: 1; transform: translateX(0); }
-        @keyframes shimmer { 0%,100% { opacity:1; } 50% { opacity:0.75; text-shadow: 0 0 18px #d4af37; } }
+        @keyframes shimmer { 0%,100% { opacity:1; text-shadow: 0 0 0px #d4af37; } 50% { opacity:0.88; text-shadow: 0 0 22px rgba(212,175,55,0.6); } }
         .logo { animation: shimmer 4s ease-in-out infinite; }
         nav { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: padding 0.3s ease, background 0.3s ease; }
         nav.scrolled { padding: 12px 5% !important; background-color: rgba(0,0,0,0.98) !important; }
