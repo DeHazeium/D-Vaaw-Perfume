@@ -144,6 +144,21 @@
             .hero-content h1 { font-size:1.8rem; }
             .products-grid { grid-template-columns:1fr !important; }
         }
+
+        .cart-icon-wrap { position: relative; display: inline-flex; align-items: center; }
+        .cart-badge { position: absolute; top: -8px; right: -12px; background: #d4af37; color: #000; border-radius: 50%; width: 17px; height: 17px; font-size: 0.6rem; font-weight: 700; display: none; align-items: center; justify-content: center; line-height: 1; }
+        .cart-badge.show { display: flex; }
+
+        /* Cookie consent banner */
+        .cookie-banner { position:fixed; bottom:0; left:0; width:100%; background:#111; color:#fff; padding:16px 5%; display:flex; align-items:center; justify-content:space-between; gap:20px; z-index:9998; transform:translateY(100%); transition:transform 0.4s ease; flex-wrap:wrap; border-top:1px solid #222; }
+        .cookie-banner.show { transform:translateY(0); }
+        .cookie-banner p { font-size:0.78rem; color:#bbb; line-height:1.6; flex:1; min-width:200px; }
+        .cookie-banner a { color:#d4af37; text-decoration:underline; }
+        .cookie-btns { display:flex; gap:10px; flex-shrink:0; }
+        .cookie-accept { background:#d4af37; color:#000; border:none; padding:9px 20px; font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; font-weight:700; font-family:'Montserrat',sans-serif; cursor:pointer; transition:background 0.3s; }
+        .cookie-accept:hover { background:#c9a227; }
+        .cookie-decline { background:transparent; color:#888; border:1px solid #333; padding:9px 20px; font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; font-family:'Montserrat',sans-serif; cursor:pointer; transition:all 0.3s; }
+        .cookie-decline:hover { border-color:#888; color:#fff; }
     </style>
 </head>
 <body>
@@ -389,6 +404,18 @@
         }
     </script>
     <script>
+
+        // Cart badge counter
+        function updateCartBadge() {
+            const cart = JSON.parse(localStorage.getItem('dvaaw_cart')) || [];
+            const total = cart.reduce((s, i) => s + i.qty, 0);
+            document.querySelectorAll('.cart-badge').forEach(b => {
+                b.textContent = total;
+                b.classList.toggle('show', total > 0);
+            });
+        }
+        updateCartBadge();
+
         window.addEventListener('scroll',()=>{
             document.querySelector('nav').classList.toggle('scrolled',window.scrollY>60);
         });
@@ -410,5 +437,13 @@
         }
         if(_mc) _mc.addEventListener('click',closeMenu);
     </script>
+    <!-- Cookie Consent Banner -->
+    <div class="cookie-banner" id="cookie-banner">
+        <p>We use localStorage to save your shopping cart. No tracking cookies. <a href="privacy.html">Privacy Policy</a></p>
+        <div class="cookie-btns">
+            <button class="cookie-accept" onclick="(function(){localStorage.setItem('dvaaw_cookie_consent','accepted');document.getElementById('cookie-banner').classList.remove('show');})()">Got it</button>
+            <button class="cookie-decline" onclick="(function(){localStorage.setItem('dvaaw_cookie_consent','declined');document.getElementById('cookie-banner').classList.remove('show');})()">Dismiss</button>
+        </div>
+    </div>
 </body>
 </html>
